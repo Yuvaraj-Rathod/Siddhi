@@ -1,9 +1,12 @@
 package com.edtech.siddhi.screens.homescreen
 
 import CodingPlatformSection
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
@@ -13,7 +16,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -24,9 +26,26 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberImagePainter
+import com.edtech.siddhi.viewmodel.LeetcodeViewModel
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
 fun HomeScreen(navController: NavController) {
+
+    val viewModel: LeetcodeViewModel = hiltViewModel()
+    val user by viewModel.user.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getUser("Yuvaraj_Rathod")
+    }
+
+    var isRefreshing by remember { mutableStateOf(false) }
+    val refreshState = rememberSwipeRefreshState(isRefreshing)
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -45,27 +64,39 @@ fun HomeScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(8.dp)
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // 1️⃣ Profile Section
+            // 🔹 1️⃣ Profile Section with Avatar from Coil
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 6.dp), // Moves it slightly to the right
+                    .padding(start = 6.dp),
                 horizontalArrangement = Arrangement.Start,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = "Profile Icon",
-                    tint = Silver,
-                    modifier = Modifier.size(46.dp)
-                )
+                if (user?.avatar != null) {
+                    Image(
+                        painter = rememberImagePainter(user!!.avatar),
+                        contentDescription = "Profile Avatar",
+                        modifier = Modifier
+                            .size(46.dp)
+                            .background(CadetGray, shape = CircleShape)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Profile Icon",
+                        tint = Silver,
+                        modifier = Modifier.size(46.dp)
+                    )
+                }
+
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Column {
                     Text(
-                        text = "Yuvaraj",
+                        text = user?.name ?: "Yuvaraj",
                         color = Silver,
                         fontSize = 17.sp,
                         fontWeight = FontWeight.Bold
@@ -79,52 +110,37 @@ fun HomeScreen(navController: NavController) {
                 }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
-            // 🔥 2️⃣ LeetCode Profile Section
-//            Column(
-//                modifier = Modifier.fillMaxWidth().weight(1f),
-//                verticalArrangement = Arrangement.Center
-//            ) {
-//                Text(
-//                    text = "🏆 LeetCode Profile",
-//                    color = Silver,
-//                    fontSize = 16.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    modifier = Modifier.padding(start = 10.dp, bottom = 4.dp)
-//                )
-//                LeetCodeProfileSection(username = "Yuvaraj_Rathod_")
-//            }
-
-            // 3️⃣ Coding Platform Section
-            Text(
-                text = "\uD83D\uDE80 Coding",
-                color = Silver,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(start = 10.dp, bottom = 4.dp)
-            )
-
-            CodingPlatformSection()
-
             Spacer(modifier = Modifier.height(8.dp))
 
-            // 4️⃣ Core Topics Section
-            SubjectSection(navController = navController)
+            Box(modifier = Modifier.fillMaxWidth().height(220.dp)) {
+                LeetCodeProfileSection(
+                    viewModel = hiltViewModel(),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
+            CodingPlatformSection(                         //CODING
+                modifier = Modifier.fillMaxWidth()
+            )
 
 
-            Spacer(modifier = Modifier.weight(1f)) // Pushes content to center
+            SubjectSection(                               //CORE TOPICS
+                navController = navController,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
 
 
-
+// 🔹 Navigation Item Sealed Class
 sealed class NavigationItem(val title: String, val icon: ImageVector, val route: String) {
     object Home : NavigationItem("Home", Icons.Default.Home, "home")
     object Profile : NavigationItem("Profile", Icons.Default.Person, "profile")
     object Settings : NavigationItem("Settings", Icons.Default.Settings, "settings")
 }
 
+// 🔹 Bottom Navigation Bar
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val navigationItems = listOf(
@@ -140,7 +156,7 @@ fun BottomNavigationBar(navController: NavController) {
     NavigationBar(
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),  // Reduced height
+            .height(56.dp), // Reduced height
         containerColor = DarkOnyx
     ) {
         navigationItems.forEachIndexed { index, item ->
@@ -169,6 +185,7 @@ fun BottomNavigationBar(navController: NavController) {
     }
 }
 
+// 🔹 Preview Function
 @Preview
 @Composable
 private fun HomeScreenPreview() {

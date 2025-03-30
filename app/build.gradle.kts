@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -37,6 +39,9 @@ android {
     buildFeatures {
         compose = true
     }
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -57,6 +62,24 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //HILT
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+// Lifecycle
+    val lifecycleVersion = "2.6.2"
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycleVersion")
+
+// Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+// Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
     //Icons
     implementation(libs.material3)
     implementation(libs.androidx.material.icons.extended)
@@ -70,6 +93,8 @@ dependencies {
 
     //coil
     implementation(libs.coil.compose)
-    
 
+    //Refresh Circle
+    implementation(libs.accompanist.swiperefresh)
+    
 }

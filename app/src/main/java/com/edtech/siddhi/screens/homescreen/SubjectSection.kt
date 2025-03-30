@@ -2,6 +2,7 @@ package com.edtech.siddhi.screens.homescreen
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -15,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,17 +51,9 @@ fun SubjectSection(modifier: Modifier = Modifier, navController: NavController) 
     )
 
     Column(modifier = modifier.padding(top = 18.dp)) {
-        Text(
-            text = "📚 Core Topics",
-            color = Silver,
-            fontSize = 17.sp,
-            fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(start = 8.dp, bottom = 10.dp)
-        )
-
         LazyRow(
             contentPadding = PaddingValues(horizontal = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(videoList) { item ->
                 SubjectCard(item)
@@ -70,61 +65,73 @@ fun SubjectSection(modifier: Modifier = Modifier, navController: NavController) 
 @Composable
 fun SubjectCard(cardData: CardData) {
     Card(
-        shape = RoundedCornerShape(10.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        colors = CardDefaults.cardColors(containerColor = DarkOnyx),
+        shape = RoundedCornerShape(14.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
         modifier = Modifier
-            .width(220.dp)
-            .height(75.dp)
+            .width(250.dp)
+            .height(100.dp)
             .clickable { cardData.onClick() }
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        // 🌌 Deep Midnight Blue to Cool Cyan Gradient
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    brush = Brush.sweepGradient(
+                        colors = listOf(DarkOnyx, Onyx) // Midnight Blue to Cyan
+                    )
+                )
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+        ) {
             Row(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 12.dp, vertical = 6.dp),
+                modifier = Modifier.fillMaxSize(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = cardData.videoTitle,
-                        fontSize = 14.sp,
+                        fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Silver,
-                        maxLines = 1
+                        color = Color.White, // Pure White for sharp contrast
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
                         text = "By ${cardData.channelName}",
-                        fontSize = 11.sp,
-                        color = CadetGray
+                        fontSize = 12.sp,
+                        color = Color(0xFFB0BEC5) // Subtle Gray-Blue
                     )
                 }
             }
 
-            // Video count and icon at the bottom-right corner
+            // Play Icon & Video Count
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 4.dp, end = 8.dp),
+                    .padding(bottom = 6.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Filled.PlayCircle,
                     contentDescription = "Video Icon",
-                    tint = Silver,
-                    modifier = Modifier.size(15.dp)
+                    tint = Color(0xFFFFC857), // ⚡ Electric Gold for emphasis
+                    modifier = Modifier.size(20.dp)
                 )
-                Spacer(modifier = Modifier.width(4.dp))
+                Spacer(modifier = Modifier.width(6.dp))
                 Text(
                     text = "${cardData.videos}",
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    color = Silver
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = Color.White
                 )
             }
         }
     }
 }
+
+
+
+
 
 
 

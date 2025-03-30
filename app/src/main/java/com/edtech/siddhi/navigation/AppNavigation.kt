@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.screens.homescreen.HomeScreen
-import com.edtech.siddhi.screens.LoginScreen
+import com.edtech.siddhi.screens.LoginScreen.LoginScreen
 import com.edtech.siddhi.screens.RegistrationScreen
 
 @SuppressLint("ComposableDestinationInComposeScope")

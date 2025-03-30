@@ -1,4 +1,4 @@
-package com.edtech.siddhi.screens
+package com.edtech.siddhi.screens.LoginScreen
 
 import android.annotation.SuppressLint
 import android.widget.Toast
@@ -16,7 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.TextStyle
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.edtech.siddhi.screens.textFieldColors
 import com.edtech.siddhi.ui.theme.*
 import com.edtech.siddhi.utils.Validations
 
