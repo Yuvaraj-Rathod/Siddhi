@@ -17,3 +17,6 @@ val RaisinBlack = Color(0xFF232426)
 val CadetGray = Color(0xFF949FA6)
 val Silver = Color(0xFFC5CCD0)
 val SoftCaramel = Color(0xFFE3A869)
+
+val userColor = Color(0xFF03A9F4)
+val modelColor = Color(0xFFE3A869)

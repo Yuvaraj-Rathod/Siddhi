@@ -129,12 +129,6 @@ fun SubjectCard(cardData: CardData) {
     }
 }
 
-
-
-
-
-
-
 @Preview
 @Composable
 private fun Preview() {

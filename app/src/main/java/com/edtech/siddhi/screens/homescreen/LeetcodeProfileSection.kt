@@ -50,7 +50,7 @@ fun LeetCodeProfileSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(12.dp),
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (profile == null) {
@@ -58,7 +58,8 @@ fun LeetCodeProfileSection(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
                 CircularProgressIndicator(color = Silver)
                 Spacer(modifier = Modifier.height(8.dp))
@@ -73,21 +74,24 @@ fun LeetCodeProfileSection(
             val data = profile!!
 
             Card(
-                shape = RoundedCornerShape(14.dp),
+                shape = RoundedCornerShape(16.dp),
                 colors = CardDefaults.cardColors(containerColor = DarkOnyx),
-                elevation = CardDefaults.cardElevation(6.dp),
-                modifier = Modifier.fillMaxWidth()
+                elevation = CardDefaults.cardElevation(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp) // ⬆ Increased height
+                    .padding(vertical = 8.dp) // ⬆ Added vertical padding for better spacing
             ) {
-                Row( // Use Row to align Progress Bar & Problem Boxes
+                Row(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
+                        .fillMaxSize()
+                        .padding(10.dp), // ⬆ Increased padding for a more open feel
                     horizontalArrangement = Arrangement.SpaceAround,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     // 🔹 Problem Stats in a Column
                     Column(
-                        modifier = Modifier.weight(1f), // Takes half of the row space
+                        modifier = Modifier.weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // 🔹 First Row (Easy & Medium)
@@ -99,7 +103,7 @@ fun LeetCodeProfileSection(
                             ProblemSolvedBox("Medium", data.mediumSolved, data.totalMedium, Color(0xFFFFC107))
                         }
 
-                        Spacer(modifier = Modifier.height(6.dp))
+                        Spacer(modifier = Modifier.height(12.dp)) // ⬆ More spacing
 
                         // 🔹 Second Row (Hard - Centered)
                         Row(
@@ -113,40 +117,40 @@ fun LeetCodeProfileSection(
                     // 🔹 Circular Progress in the Center
                     Box(
                         modifier = Modifier
-                            .size(140.dp) // Ensure it's large enough
-                            .weight(1f), // Takes half of the row space
+                            .size(150.dp) // ⬆ Made it larger
+                            .weight(1f),
                         contentAlignment = Alignment.Center
                     ) {
-                        Canvas(modifier = Modifier.size(130.dp)) {
+                        Canvas(modifier = Modifier.size(150.dp)) { // ⬆ Slightly larger circle
                             val progress = data.totalSolved.toFloat() / data.totalQuestions.toFloat()
 
                             drawArc(
-                                color = Color.Gray, // Unsolved part
+                                color = Color.Gray,
                                 startAngle = 270f,
                                 sweepAngle = 360f,
                                 useCenter = false,
-                                style = Stroke(width = 12.dp.toPx(), cap = StrokeCap.Round)
+                                style = Stroke(width = 14.dp.toPx(), cap = StrokeCap.Round)
                             )
 
                             drawArc(
-                                color = Color.Red, // Solved part
+                                color = Color.Red,
                                 startAngle = 270f,
                                 sweepAngle = 360 * progress,
                                 useCenter = false,
-                                style = Stroke(width = 12.dp.toPx(), cap = StrokeCap.Round)
+                                style = Stroke(width = 14.dp.toPx(), cap = StrokeCap.Round)
                             )
                         }
 
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             Text(
                                 text = "${data.totalSolved}",
-                                fontSize = 22.sp,
+                                fontSize = 24.sp, // ⬆ Larger text
                                 fontWeight = FontWeight.Bold,
                                 color = Silver
                             )
                             Text(
                                 text = "${data.totalQuestions}",
-                                fontSize = 12.sp,
+                                fontSize = 14.sp, // ⬆ Slightly larger
                                 color = CadetGray
                             )
                         }
@@ -172,7 +176,7 @@ fun ProblemSolvedBox(level: String, solved: Int, total: Int, color: Color) {
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(text = level, color = color, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                Text(text = "$solved / $total", color = Silver, fontSize = 13.sp)
+                Text(text = "$solved / $total", color = Silver, fontSize = 11.sp)
             }
         }
     }

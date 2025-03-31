@@ -96,5 +96,14 @@ dependencies {
 
     //Refresh Circle
     implementation(libs.accompanist.swiperefresh)
-    
+
+    //Gemini
+    implementation(libs.generativeai)
+
+    //FireBase
+    implementation(libs.firebase.config.ktx)
+
+    //Lottie
+    implementation(libs.lottie.compose)
+
 }

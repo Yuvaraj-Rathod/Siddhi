@@ -16,3 +16,8 @@ data class CardData(
     val videos: Int, // Total videos in the playlist
     val onClick: () -> Unit
 )
+
+data class MessageModel(
+    val message: String,
+    val role : String
+)

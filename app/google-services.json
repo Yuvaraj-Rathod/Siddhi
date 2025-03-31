@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "481300425579",
+    "project_id": "siddhi-1a130",
+    "storage_bucket": "siddhi-1a130.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481300425579:android:2d0608cabad8200f6b3a2e",
+        "android_client_info": {
+          "package_name": "com.edtech.siddhi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi1M2XqUAybB3M5ZO4OLW__x8rywopUkQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -39,7 +39,7 @@ fun SiddhiTheme(content: @Composable () -> Unit) {
     if (!view.isInEditMode) {
         SideEffect {
             systemUiController.isStatusBarVisible = true
-            systemUiController.isNavigationBarVisible = true
+            systemUiController.isNavigationBarVisible = false
             systemUiController.setStatusBarColor(Color.Transparent, darkIcons = false)
             systemUiController.setNavigationBarColor(Color.Transparent, darkIcons = false)
         }

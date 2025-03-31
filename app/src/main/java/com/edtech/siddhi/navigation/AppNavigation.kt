@@ -9,6 +9,8 @@ import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.screens.homescreen.HomeScreen
 import com.edtech.siddhi.screens.LoginScreen.LoginScreen
 import com.edtech.siddhi.screens.RegistrationScreen
+import com.edtech.siddhi.screens.chatbotscreen.ChatScreen
+import com.edtech.siddhi.viewmodel.ChatViewModel
 
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
@@ -23,8 +25,11 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             RegistrationScreen(navController = navController)
         }
         composable("login") {
-                LoginScreen(navController = navController)
+            LoginScreen(navController = navController)
             }
+        composable("bot") {
+            ChatScreen(chatViewModel = ChatViewModel())
+        }
 
         }
 }

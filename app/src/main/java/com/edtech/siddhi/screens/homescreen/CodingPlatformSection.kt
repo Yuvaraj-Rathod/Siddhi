@@ -23,68 +23,68 @@ import androidx.compose.ui.unit.sp
 import com.edtech.siddhi.model.CodingPlatform
 import androidx.core.net.toUri
 
-@Composable
-fun CodingPlatformSection(modifier: Modifier = Modifier) {
-    val context = LocalContext.current
+    @Composable
+    fun CodingPlatformSection(modifier: Modifier = Modifier) {
+        val context = LocalContext.current
 
-    val platforms = listOf(
-        CodingPlatform("LeetCode", "Top 150 Must Do Questions",
-            Brush.verticalGradient(listOf(Color(0xFFFFD54F), Color(0xFFFFA000))),
-            "https://leetcode.com/studyplan/top-interview-150/"),
-        CodingPlatform("GeeksForGeeks", "Best 75 Coding Questions",
-            Brush.verticalGradient(listOf(Color(0xFF81C784), Color(0xFF388E3C))),
-            "https://www.geeksforgeeks.org/blind-75/"),
-        CodingPlatform("TUF", "TCS NQT Must Do 100s",
-            Brush.verticalGradient(listOf(Color(0xFF64B5F6), Color(0xFF1976D2))),
-            "https://takeuforward.org/interviews/tcs-nqt-coding-sheet-tcs-coding-questions/"),
-        CodingPlatform("LeetCode SQL", "Top 50 SQL Interview Questions",
-            Brush.verticalGradient(listOf(Color(0xFFBA68C8), Color(0xFF6A1B9A))),
-            "https://leetcode.com/studyplan/top-sql-50/")
-    )
+        val platforms = listOf(
+            CodingPlatform("LeetCode", "Top 150 Must Do Questions",
+                Brush.verticalGradient(listOf(Color(0xFFFFD54F), Color(0xFFFFA000))),
+                "https://leetcode.com/studyplan/top-interview-150/"),
+            CodingPlatform("GeeksForGeeks", "Best 75 Coding Questions",
+                Brush.verticalGradient(listOf(Color(0xFF81C784), Color(0xFF388E3C))),
+                "https://www.geeksforgeeks.org/blind-75/"),
+            CodingPlatform("TUF", "TCS NQT Must Do 100s",
+                Brush.verticalGradient(listOf(Color(0xFF64B5F6), Color(0xFF1976D2))),
+                "https://takeuforward.org/interviews/tcs-nqt-coding-sheet-tcs-coding-questions/"),
+            CodingPlatform("LeetCode SQL", "Top 50 SQL Interview Questions",
+                Brush.verticalGradient(listOf(Color(0xFFBA68C8), Color(0xFF6A1B9A))),
+                "https://leetcode.com/studyplan/top-sql-50/")
+        )
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(5.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(platforms) { platform ->
-            Card(
-                shape = RoundedCornerShape(16.dp), // Subtle rounded corners
-                elevation = CardDefaults.cardElevation(6.dp), // Elevation for shadow
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1.1f) // Slightly adjusted for better alignment
-                    .clickable {
-                        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(platform.url)))
-                    }
-            ) {
-                Column(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(5.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(platforms) { platform ->
+                Card(
+                    shape = RoundedCornerShape(16.dp), // Subtle rounded corners
+                    elevation = CardDefaults.cardElevation(6.dp), // Elevation for shadow
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(platform.gradient)
-                        .padding(16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start
+                        .fillMaxWidth()
+                        .aspectRatio(1.1f) // Slightly adjusted for better alignment
+                        .clickable {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(platform.url)))
+                        }
                 ) {
-                    Text(
-                        text = platform.name,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Text(
-                        text = platform.description,
-                        fontSize = 12.sp,
-                        color = Color.White.copy(alpha = 0.9f)
-                    )
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(platform.gradient)
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.Start
+                    ) {
+                        Text(
+                            text = platform.name,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = Color.White
+                        )
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = platform.description,
+                            fontSize = 12.sp,
+                            color = Color.White.copy(alpha = 0.9f)
+                        )
+                    }
                 }
             }
         }
     }
-}
 
 
 @Preview
