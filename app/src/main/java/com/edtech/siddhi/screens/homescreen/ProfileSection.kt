@@ -47,7 +47,7 @@ fun ProfileSection(user: UserDetail?,navController: NavController) {
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 2.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.DarkGray),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF303030)),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(
@@ -87,7 +87,7 @@ fun ProfileSection(user: UserDetail?,navController: NavController) {
                 modifier = Modifier.weight(1f)
             ) {
                 Text(
-                    text = user?.name ?: "Yuvaraj",
+                    text = user?.name ?: "User",
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
@@ -95,7 +95,7 @@ fun ProfileSection(user: UserDetail?,navController: NavController) {
                 )
 
                 Text(
-                    text = user?.username ?: "yrrathod0@gmail.com",
+                    text = user?.username ?: "User@gmail.com",
                     color = CadetGray,
                     fontSize = 14.sp
                 )

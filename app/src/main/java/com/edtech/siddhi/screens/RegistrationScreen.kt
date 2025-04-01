@@ -2,6 +2,7 @@ package com.edtech.siddhi.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -48,7 +50,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(RaisinBlack, DarkOnyx)))
+            .background(Color(0xFF181C14))
             .padding(horizontal = 24.dp),
         contentAlignment = Alignment.Center
     ) {
@@ -58,7 +60,8 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
-                .background(Color(0xFF434344))
+                .background(Color(0xFF181C14))
+                .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(16.dp)) // Thin border
                 .padding(24.dp)
         ) {
             Text(
@@ -146,7 +149,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                     leetCodeLink = it
                     leetCodeError = !Validations.isValidLeetCodeProfile(leetCodeLink)
                 },
-                label = { Text("LeetCode Profile Link", color = Silver) },
+                label = { Text("LeetCode Profile Id", color = Silver) },
                 textStyle = TextStyle(color = Color.White),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Uri),
@@ -157,11 +160,10 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 modifier = Modifier.fillMaxWidth(),
                 isError = leetCodeError
             )
-            if (leetCodeError) Text("Enter a valid LeetCode profile link", color = Color.Red, fontSize = 12.sp)
+            if (leetCodeError) Text("Enter a valid LeetCode profile id", color = Color.Red, fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Register Button
             Button(
                 onClick = {
                     if (emailError || passwordError || leetCodeError) {
@@ -170,14 +172,17 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                         Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
                     }
                 },
-                shape = RoundedCornerShape(8.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Silver),
+                shape = RoundedCornerShape(12.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = SoftCaramel),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(52.dp)
+                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)), // Added depth
+                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp, pressedElevation = 2.dp)
             ) {
-                Text(text = "Register", fontSize = 16.sp, fontWeight = FontWeight.Medium, color = Color.Black)
+                Text(text = "Register", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = RaisinBlack)
             }
+
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -201,27 +206,22 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
     }
 }
 
-// Common text field styling
 @Composable
 fun textFieldColors() = TextFieldDefaults.colors(
     focusedContainerColor = Color.Transparent,
     unfocusedContainerColor = Color.Transparent,
-    disabledContainerColor = Color.Transparent,
     errorContainerColor = Color.Transparent,
-    focusedIndicatorColor = Silver,
-    unfocusedIndicatorColor = CadetGray,
-    disabledIndicatorColor = Color.Gray,
+    focusedIndicatorColor = SoftCaramel, // Now a warm glow effect
+    unfocusedIndicatorColor = CadetGray.copy(alpha = 0.8f),
+    cursorColor = SoftCaramel,
     errorIndicatorColor = Color.Red,
-    cursorColor = Silver,
-    errorCursorColor = Color.Red,
     focusedLabelColor = Silver,
     unfocusedLabelColor = CadetGray,
     errorLabelColor = Color.Red,
     focusedTextColor = Color.White,
-    unfocusedTextColor = Color.White,
-    disabledTextColor = Color.Gray,
-    errorTextColor = Color.Red
+    unfocusedTextColor = Color.White
 )
+
 
 @Preview
 @Composable

@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.screens.homescreen.HomeScreen
 import com.edtech.siddhi.screens.LoginScreen.LoginScreen
 import com.edtech.siddhi.screens.RegistrationScreen
+import com.edtech.siddhi.screens.WelcomeScreen
 import com.edtech.siddhi.screens.chatbotscreen.ChatScreen
 import com.edtech.siddhi.screens.subject.CodeSnippetPage
 import com.edtech.siddhi.viewmodel.ChatViewModel
@@ -22,7 +23,7 @@ import com.example.manvantara.screens.subject.OsPage
 fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController,"home"){
+    NavHost(navController = navController,"welcome"){
         composable("home") {
             HomeScreen(navController = navController)
         }
@@ -49,6 +50,9 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         }
         composable("csnippet") {
             CodeSnippetPage(navController = navController)
+        }
+        composable("welcome") {
+            WelcomeScreen(navController = navController)
         }
 
         }

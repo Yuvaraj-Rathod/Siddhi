@@ -44,7 +44,7 @@ fun LeetCodeProfileSection(
     val profile by viewModel.profile.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getProfile(username = "Yuvaraj_Rathod_")
+        viewModel.getProfile(username = "priyanshu2202k")
     }
 
     Column(
@@ -75,7 +75,7 @@ fun LeetCodeProfileSection(
 
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = DarkOnyx),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF303030)),
                 elevation = CardDefaults.cardElevation(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()

@@ -67,6 +67,7 @@ fun SubjectCard(cardData: CardData) {
     Card(
         shape = RoundedCornerShape(14.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF303030)),
         modifier = Modifier
             .width(250.dp)
             .height(100.dp)
@@ -76,12 +77,7 @@ fun SubjectCard(cardData: CardData) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.sweepGradient(
-                        colors = listOf(DarkOnyx, Onyx) // Midnight Blue to Cyan
-                    )
-                )
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .padding(horizontal = 12.dp, vertical = 10.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxSize(),
