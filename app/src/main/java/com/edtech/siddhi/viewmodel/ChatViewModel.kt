@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 class ChatViewModel : ViewModel() {
 
-    val generativeModel = GenerativeModel(modelName = "gemini-1.5-flash", apiKey = Constants.apiKey)
+    val generativeModel = GenerativeModel(modelName = "gemini-1.5-flash", apiKey = "")
     val messageList = mutableStateListOf<MessageModel>()
 
     fun sendMessage(question: String) {

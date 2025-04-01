@@ -21,3 +21,16 @@ data class MessageModel(
     val message: String,
     val role : String
 )
+
+data class YoutubeVideo(
+    val title: String,
+    val link: String,
+    val channelName: String,
+    var difficultyTag: DifficultyTag,
+    var isWatched: Boolean,
+    var isFavorite: Boolean
+)
+
+enum class DifficultyTag {
+    EASY, MEDIUM, HARD
+}

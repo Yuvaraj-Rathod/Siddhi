@@ -33,20 +33,20 @@ import com.edtech.siddhi.ui.theme.*
 @Composable
 fun SubjectSection(modifier: Modifier = Modifier, navController: NavController) {
     val videoList = listOf(
-        CardData(videoTitle = "Operating System", channelName = "Love Babbar", videos = 45) {
-            navController.navigate("home")
-        },
-        CardData(videoTitle = "Computer Networks", channelName = "KnowledgeGATE", videos = 40) {
-            navController.navigate("home")
-        },
         CardData(videoTitle = "Data Structures & Algorithms", channelName = "Apna College", videos = 60) {
-            navController.navigate("home")
+            navController.navigate("dsa")
         },
         CardData(videoTitle = "Database Management", channelName = "Code Help", videos = 50) {
-            navController.navigate("home")
+            navController.navigate("dbms")
+        },
+        CardData(videoTitle = "Operating System", channelName = "Love Babbar", videos = 45) {
+            navController.navigate("os")
+        },
+        CardData(videoTitle = "Computer Networks", channelName = "KnowledgeGATE", videos = 40) {
+            navController.navigate("cn")
         },
         CardData(videoTitle = "Guess the Output", channelName = "Geeks For Geeks", videos = 25) {
-            navController.navigate("home")
+            navController.navigate("csnippet")
         }
     )
 

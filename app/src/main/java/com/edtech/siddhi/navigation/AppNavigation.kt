@@ -10,7 +10,12 @@ import com.edtech.siddhi.screens.homescreen.HomeScreen
 import com.edtech.siddhi.screens.LoginScreen.LoginScreen
 import com.edtech.siddhi.screens.RegistrationScreen
 import com.edtech.siddhi.screens.chatbotscreen.ChatScreen
+import com.edtech.siddhi.screens.subject.CodeSnippetPage
 import com.edtech.siddhi.viewmodel.ChatViewModel
+import com.example.manvantara.screens.subject.CnPage
+import com.example.manvantara.screens.subject.DbmsPage
+import com.example.manvantara.screens.subject.DsaPage
+import com.example.manvantara.screens.subject.OsPage
 
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
@@ -29,6 +34,21 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             }
         composable("bot") {
             ChatScreen(chatViewModel = ChatViewModel())
+        }
+        composable("dbms") {
+            DbmsPage(navController = navController)
+        }
+        composable("os") {
+            OsPage(navController = navController)
+        }
+        composable("dsa") {
+            DsaPage(navController = navController)
+        }
+        composable("cn") {
+            CnPage(navController = navController)
+        }
+        composable("csnippet") {
+            CodeSnippetPage(navController = navController)
         }
 
         }
