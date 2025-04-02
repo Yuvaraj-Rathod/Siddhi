@@ -1,5 +1,6 @@
-package com.edtech.siddhi.screens
+package com.edtech.siddhi.screens.authenticationscreens
 
+import android.annotation.SuppressLint
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,15 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,19 +31,18 @@ import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
 import com.edtech.siddhi.utils.Validations
 
+@SuppressLint("ShowToast")
 @Composable
-fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
-    var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var leetCodeLink by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
 
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
-    var leetCodeError by remember { mutableStateOf(false) }
 
     Box(
         modifier = modifier
@@ -61,11 +58,11 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(16.dp))
                 .background(Color(0xFF181C14))
-                .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(16.dp)) // Thin border
+                .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(16.dp))
                 .padding(24.dp)
         ) {
             Text(
-                text = "Create an Account",
+                text = "Welcome Back",
                 style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.SemiBold),
                 color = Silver
             )
@@ -73,30 +70,14 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Sign up to continue",
+                text = "Login to continue",
                 style = MaterialTheme.typography.bodyMedium,
                 color = CadetGray
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Name Input Field
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Full Name", color = Silver) },
-                textStyle = TextStyle(color = Color.White),
-                singleLine = true,
-                leadingIcon = {
-                    Icon(Icons.Default.Person, contentDescription = "Name Icon", tint = Silver, modifier = Modifier.size(18.dp))
-                },
-                colors = textFieldColors(),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // Email Input Field
+            // Email Input
             OutlinedTextField(
                 value = email,
                 onValueChange = {
@@ -104,21 +85,21 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                     emailError = !Validations.isValidEmail(email)
                 },
                 label = { Text("Email", color = Silver) },
-                textStyle = TextStyle(color = Color.White),
+                textStyle = TextStyle(color = Silver),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                 leadingIcon = {
-                    Icon(Icons.Default.Email, contentDescription = "Email Icon", tint = Silver, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.Email, contentDescription = "Email", tint = Silver, modifier = Modifier.size(18.dp))
                 },
                 colors = textFieldColors(),
                 modifier = Modifier.fillMaxWidth(),
                 isError = emailError
             )
-            if (emailError) Text("Invalid Email", color = Color.Red, fontSize = 12.sp)
+            if (emailError) Text("Enter a valid Gmail ID", color = Color.Red, fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Password Input Field
+            // Password Input
             OutlinedTextField(
                 value = password,
                 onValueChange = {
@@ -126,50 +107,39 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                     passwordError = !Validations.isValidPassword(password)
                 },
                 label = { Text("Password", color = Silver) },
-                textStyle = TextStyle(color = Color.White),
+                textStyle = TextStyle(color = Silver),
                 singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
+                visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 leadingIcon = {
-                    Icon(Icons.Default.Lock, contentDescription = "Password Icon", tint = Silver, modifier = Modifier.size(18.dp))
+                    Icon(Icons.Filled.Lock, contentDescription = "Password", tint = Silver, modifier = Modifier.size(18.dp))
+                },
+                trailingIcon = {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                        Icon(
+                            imageVector = if (passwordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = "Toggle Password Visibility",
+                            tint = Silver,
+                            modifier = Modifier.size(18.dp)
+                        )
+                    }
                 },
                 colors = textFieldColors(),
                 modifier = Modifier.fillMaxWidth(),
-                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 isError = passwordError
             )
-            if (passwordError) Text("Password must be at least 6 characters, include a number, letter, and symbol.", color = Color.Red, fontSize = 12.sp)
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            // LeetCode Profile Link Input Field
-            OutlinedTextField(
-                value = leetCodeLink,
-                onValueChange = {
-                    leetCodeLink = it
-                    leetCodeError = !Validations.isValidLeetCodeProfile(leetCodeLink)
-                },
-                label = { Text("LeetCode Profile Id", color = Silver) },
-                textStyle = TextStyle(color = Color.White),
-                singleLine = true,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Uri),
-                leadingIcon = {
-                    Icon(Icons.Default.Link, contentDescription = "LeetCode Icon", tint = Silver, modifier = Modifier.size(18.dp))
-                },
-                colors = textFieldColors(),
-                modifier = Modifier.fillMaxWidth(),
-                isError = leetCodeError
-            )
-            if (leetCodeError) Text("Enter a valid LeetCode profile id", color = Color.Red, fontSize = 12.sp)
+            if (passwordError) Text("Password must be at least 6 characters and contain a lowercase, uppercase, and special character.", color = Color.Red, fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(20.dp))
 
+            // Login Button
             Button(
                 onClick = {
-                    if (emailError || passwordError || leetCodeError) {
+                    if (emailError || passwordError) {
                         Toast.makeText(context, "Please fix the errors", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                        navController.navigate("home")
                     }
                 },
                 shape = RoundedCornerShape(12.dp),
@@ -177,54 +147,43 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp)
-                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)), // Added depth
+                    .shadow(8.dp, shape = RoundedCornerShape(12.dp)),
                 elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp, pressedElevation = 2.dp)
             ) {
-                Text(text = "Register", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = RaisinBlack)
+                Text(text = "Login", fontSize = 18.sp, fontWeight = FontWeight.Bold, color = RaisinBlack)
             }
-
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Already have an account? Login
+            // Forgot Password
+            TextButton(onClick = { /* Forgot Password Action */ }) {
+                Text("Forgot Password?", color = CadetGray, fontSize = 14.sp)
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Create a new account? Register
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Already have an account?", color = CadetGray, fontSize = 14.sp)
+                Text("Create a new account?", color = CadetGray, fontSize = 14.sp)
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
-                    "Login",
+                    "Register",
                     color = Silver,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.clickable { navController.navigate("login") }
+                    modifier = Modifier.clickable { navController.navigate("register") }
                 )
             }
         }
     }
 }
 
-@Composable
-fun textFieldColors() = TextFieldDefaults.colors(
-    focusedContainerColor = Color.Transparent,
-    unfocusedContainerColor = Color.Transparent,
-    errorContainerColor = Color.Transparent,
-    focusedIndicatorColor = SoftCaramel, // Now a warm glow effect
-    unfocusedIndicatorColor = CadetGray.copy(alpha = 0.8f),
-    cursorColor = SoftCaramel,
-    errorIndicatorColor = Color.Red,
-    focusedLabelColor = Silver,
-    unfocusedLabelColor = CadetGray,
-    errorLabelColor = Color.Red,
-    focusedTextColor = Color.White,
-    unfocusedTextColor = Color.White
-)
-
-
 @Preview
 @Composable
-private fun PreviewRegistration() {
-    RegistrationScreen(navController = rememberNavController())
+private fun PreviewLogin() {
+    LoginScreen(navController = rememberNavController())
 }

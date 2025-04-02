@@ -107,4 +107,9 @@ dependencies {
     //Lottie
     implementation(libs.lottie.compose)
 
+    //Skeletal Loading Shimmer
+    implementation(libs.compose.shimmer)
+
+    //Splash Screen
+    implementation(libs.lottie.compose.v600)
 }

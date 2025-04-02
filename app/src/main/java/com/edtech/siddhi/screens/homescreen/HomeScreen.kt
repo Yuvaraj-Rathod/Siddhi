@@ -34,6 +34,10 @@ import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.edtech.siddhi.skeletalloading.CodingPlatformSkeleton
+import com.edtech.siddhi.skeletalloading.LeetCodeProfileSkeleton
+import com.edtech.siddhi.skeletalloading.ProfileSectionSkeleton
+import com.edtech.siddhi.skeletalloading.SubjectSkeleton
 import com.edtech.siddhi.viewmodel.LeetcodeViewModel
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -43,56 +47,62 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 fun HomeScreen(navController: NavController) {
     val viewModel: LeetcodeViewModel = hiltViewModel()
     val user by viewModel.user.collectAsState()
+    val profile by viewModel.profile.collectAsState()
+
+    val isLoading = user == null || profile == null
 
     LaunchedEffect(Unit) {
-        viewModel.getUser("priyanshu2202k")
+        viewModel.getUser("Ankush3323")
+        viewModel.getProfile("Ankush3323")
     }
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate("bot") },
-                containerColor = Color.DarkGray, // Darker Silver for better contrast
+                containerColor = Color.DarkGray,
                 shape = CircleShape,
                 modifier = Modifier.size(63.dp)
             ) {
-                Icon(imageVector = Icons.Filled.CatchingPokemon, contentDescription = "Add", tint = Color.Cyan, modifier = Modifier.size(43.dp))
+                Icon(
+                    imageVector = Icons.Filled.CatchingPokemon,
+                    contentDescription = "Add",
+                    tint = Color.Cyan,
+                    modifier = Modifier.size(43.dp)
+                )
             }
         },
-        bottomBar = {
-            BottomNavigationBar(navController)
-        }
+        bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 6.dp, vertical = 6.dp), // Reduced padding
+                .padding(horizontal = 6.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ProfileSection(user, navController)
+            // Profile Section
+            if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController)
 
-            Box(modifier = Modifier.fillMaxWidth().height(220.dp)) { // Reduced height
-                LeetCodeProfileSection(
-                    viewModel = hiltViewModel(),
-                    modifier = Modifier.fillMaxWidth()
-                )
+            // LeetCode Profile Section
+            Box(modifier = Modifier.fillMaxWidth().height(220.dp)) {
+                if (isLoading) LeetCodeProfileSkeleton() else LeetCodeProfileSection(viewModel)
             }
 
-            CodingPlatformSection(
-                modifier = Modifier.fillMaxWidth()
-            )
+            // Coding Platforms Section
+            if (isLoading) CodingPlatformSkeleton() else CodingPlatformSection(Modifier.fillMaxWidth())
 
 
-            SubjectSection(
+            // Subjects Section
+            if (isLoading) SubjectSkeleton() else SubjectSection(                               //CORE TOPICS
                 navController = navController,
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Spacer(modifier = Modifier.height(6.dp))
         }
     }
 }
+
 
 @Preview
 @Composable

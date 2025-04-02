@@ -6,9 +6,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.edtech.siddhi.screens.SplashScreen
 import com.edtech.siddhi.screens.homescreen.HomeScreen
-import com.edtech.siddhi.screens.LoginScreen.LoginScreen
-import com.edtech.siddhi.screens.RegistrationScreen
+import com.edtech.siddhi.screens.authenticationscreens.LoginScreen
+import com.edtech.siddhi.screens.authenticationscreens.RegistrationScreen
 import com.edtech.siddhi.screens.WelcomeScreen
 import com.edtech.siddhi.screens.chatbotscreen.ChatScreen
 import com.edtech.siddhi.screens.subject.CodeSnippetPage
@@ -23,7 +24,7 @@ import com.example.manvantara.screens.subject.OsPage
 fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController,"welcome"){
+    NavHost(navController = navController,"splash"){
         composable("home") {
             HomeScreen(navController = navController)
         }
@@ -54,6 +55,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
         composable("welcome") {
             WelcomeScreen(navController = navController)
         }
-
+        composable("splash") {
+            SplashScreen(navController = navController)
         }
+    }
 }
