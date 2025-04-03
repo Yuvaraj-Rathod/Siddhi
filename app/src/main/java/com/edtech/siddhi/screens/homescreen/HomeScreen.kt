@@ -1,5 +1,6 @@
 package com.edtech.siddhi.screens.homescreen
 
+
 import CodingPlatformSection
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,6 +10,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.AddAPhoto
+import androidx.compose.material.icons.filled.Android
 import androidx.compose.material.icons.filled.AssistWalker
 import androidx.compose.material.icons.filled.Assistant
 import androidx.compose.material.icons.filled.CatchingPokemon
@@ -22,6 +25,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -52,7 +56,7 @@ fun HomeScreen(navController: NavController) {
     val isLoading = user == null || profile == null
 
     LaunchedEffect(Unit) {
-        viewModel.getUser("Ankush3323")
+        viewModel.getUser("Yuvaraj_Rathod_")
         viewModel.getProfile("Ankush3323")
     }
 
@@ -60,19 +64,19 @@ fun HomeScreen(navController: NavController) {
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { navController.navigate("bot") },
-                containerColor = Color.DarkGray,
+                containerColor = Color(0xFF434344),
                 shape = CircleShape,
-                modifier = Modifier.size(63.dp)
+                modifier = Modifier.size(60.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Filled.CatchingPokemon,
-                    contentDescription = "Add",
-                    tint = Color.Cyan,
-                    modifier = Modifier.size(43.dp)
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = "person",
+                    tint =  Color(0xFFE3A869),
+                    modifier = Modifier.size(30.dp)
                 )
             }
         },
-        bottomBar = { BottomNavigationBar(navController) }
+        bottomBar = { BottomNavBar(navController) }
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -81,23 +85,20 @@ fun HomeScreen(navController: NavController) {
                 .padding(horizontal = 6.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Profile Section
+            // User Profile Section
             if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController)
 
-            // LeetCode Profile Section
-            Box(modifier = Modifier.fillMaxWidth().height(220.dp)) {
-                if (isLoading) LeetCodeProfileSkeleton() else LeetCodeProfileSection(viewModel)
-            }
+
+            // Let code Profile Section
+            if (isLoading) LeetCodeProfileSkeleton() else LeetCodeProfileSection(viewModel)
+
 
             // Coding Platforms Section
             if (isLoading) CodingPlatformSkeleton() else CodingPlatformSection(Modifier.fillMaxWidth())
 
 
             // Subjects Section
-            if (isLoading) SubjectSkeleton() else SubjectSection(                               //CORE TOPICS
-                navController = navController,
-                modifier = Modifier.fillMaxWidth()
-            )
+            if (isLoading) SubjectSkeleton() else SubjectSection( navController = navController, modifier = Modifier.fillMaxWidth())
 
         }
     }

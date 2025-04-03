@@ -22,6 +22,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
@@ -34,6 +35,7 @@ import com.edtech.siddhi.ui.theme.CadetGray
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.edtech.siddhi.api.LeetcodeProfile
 import com.edtech.siddhi.viewmodel.LeetcodeViewModel
 
 @Composable
@@ -79,8 +81,8 @@ fun LeetCodeProfileSection(
                 elevation = CardDefaults.cardElevation(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp) // ⬆ Increased height
-                    .padding(vertical = 8.dp) // ⬆ Added vertical padding for better spacing
+                    .height(215.dp) // ⬆ Increased height
+                    .padding(vertical = 4.dp) // ⬆ Added vertical padding for better spacing
             ) {
                 Row(
                     modifier = Modifier
@@ -99,8 +101,8 @@ fun LeetCodeProfileSection(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            ProblemSolvedBox("Easy", data.easySolved, data.totalEasy, Color(0xFF00A676))
-                            ProblemSolvedBox("Medium", data.mediumSolved, data.totalMedium, Color(0xFFFFC107))
+                            ProblemSolvedBox("Easy", data.easySolved, data.totalEasy, Color(0xFF00A676), 78.dp)
+                            ProblemSolvedBox("Medium", data.mediumSolved, data.totalMedium, Color(0xFFFFC107), 78.dp)
                         }
 
                         Spacer(modifier = Modifier.height(12.dp)) // ⬆ More spacing
@@ -110,18 +112,18 @@ fun LeetCodeProfileSection(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            ProblemSolvedBox("Hard", data.hardSolved, data.totalHard, Color(0xFFE63946))
+                            ProblemSolvedBox("Hard", data.hardSolved, data.totalHard, Color(0xFFE63946), 78.dp)
                         }
                     }
 
                     // 🔹 Circular Progress in the Center
                     Box(
                         modifier = Modifier
-                            .size(150.dp) // ⬆ Made it larger
+                            .size(120.dp) // ⬆ Made it larger
                             .weight(1f),
                         contentAlignment = Alignment.Center
                     ) {
-                        Canvas(modifier = Modifier.size(150.dp)) { // ⬆ Slightly larger circle
+                        Canvas(modifier = Modifier.size(120.dp)) { // ⬆ Slightly larger circle
                             val progress = data.totalSolved.toFloat() / data.totalQuestions.toFloat()
 
                             drawArc(
@@ -163,24 +165,59 @@ fun LeetCodeProfileSection(
 
 
 @Composable
-fun ProblemSolvedBox(level: String, solved: Int, total: Int, color: Color) {
+fun ProblemSolvedBox(level: String, solved: Int, total: Int, color: Color, size: Dp) {
     Card(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(containerColor = DarkOnyx),
-        elevation = CardDefaults.cardElevation(6.dp), // 🔹 Adds elevation
-        modifier = Modifier.padding(4.dp) // 🔹 Adds spacing around each box
+        elevation = CardDefaults.cardElevation(6.dp),
+        modifier = Modifier
+            .padding(4.dp)
+            .size(size)
     ) {
         Box(
-            modifier = Modifier
-                .padding(12.dp) // 🔹 Padding inside the box
+            modifier = Modifier.fillMaxSize(), // 🔹 Makes Box take full space
+            contentAlignment = Alignment.Center // 🔹 Centers content
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text(text = level, color = color, fontSize = 14.sp, fontWeight = FontWeight.Bold)
-                Text(text = "$solved / $total", color = Silver, fontSize = 11.sp)
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(text = level, color = color, fontSize = 14.sp, fontWeight = FontWeight.Bold,maxLines = 1)
+                Text(text = "$solved / $total", color = Silver, fontSize = 11.sp,maxLines = 1)
             }
         }
     }
 }
+
+//@Composable
+//fun AnimatedCircularProgress(data: LeetcodeProfile) {
+//    val progress = data.totalSolved.toFloat() / data.totalQuestions.toFloat()
+//
+//    // Animate progress change from 0 to the actual progress
+//    val animatedProgress by animateFloatAsState(
+//        targetValue = progress,
+//        animationSpec = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+//        label = "progressAnimation"
+//    )
+//
+//    Canvas(modifier = Modifier.size(120.dp)) {
+//        drawArc(
+//            color = Color.Gray, // Background arc
+//            startAngle = 270f,
+//            sweepAngle = 360f,
+//            useCenter = false,
+//            style = Stroke(width = 14.dp.toPx(), cap = StrokeCap.Round)
+//        )
+//
+//        drawArc(
+//            color = Color.Red, // Animated Progress Arc
+//            startAngle = 270f,
+//            sweepAngle = 360 * animatedProgress,
+//            useCenter = false,
+//            style = Stroke(width = 14.dp.toPx(), cap = StrokeCap.Round)
+//        )
+//    }
+//}
+
 
 
 

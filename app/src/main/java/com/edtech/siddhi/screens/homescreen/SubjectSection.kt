@@ -104,7 +104,7 @@ fun SubjectCard(cardData: CardData) {
             Row(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(bottom = 6.dp, end = 12.dp),
+                    .padding(bottom = 3.dp, end = 12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
