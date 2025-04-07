@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -42,22 +43,28 @@ import com.edtech.siddhi.skeletalloading.CodingPlatformSkeleton
 import com.edtech.siddhi.skeletalloading.LeetCodeProfileSkeleton
 import com.edtech.siddhi.skeletalloading.ProfileSectionSkeleton
 import com.edtech.siddhi.skeletalloading.SubjectSkeleton
+import com.edtech.siddhi.viewmodel.AuthState
+import com.edtech.siddhi.viewmodel.AuthViewModel
 import com.edtech.siddhi.viewmodel.LeetcodeViewModel
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.firebase.auth.oAuthProvider
+import com.google.rpc.context.AttributeContext.Auth
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @Composable
-fun HomeScreen(navController: NavController) {
+fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
     val viewModel: LeetcodeViewModel = hiltViewModel()
     val user by viewModel.user.collectAsState()
     val profile by viewModel.profile.collectAsState()
+
+    var authState = authViewModel.authState.observeAsState()
 
     val isLoading = user == null || profile == null
 
     LaunchedEffect(Unit) {
         viewModel.getUser("Yuvaraj_Rathod_")
-        viewModel.getProfile("Ankush3323")
+        viewModel.getProfile("code__HARD")
     }
 
     Scaffold(
@@ -86,7 +93,7 @@ fun HomeScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // User Profile Section
-            if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController)
+            if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController ,authViewModel)
 
 
             // Let code Profile Section
@@ -108,5 +115,5 @@ fun HomeScreen(navController: NavController) {
 @Preview
 @Composable
 private fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
+    HomeScreen(navController = rememberNavController(), authViewModel = AuthViewModel())
 }

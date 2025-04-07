@@ -46,7 +46,7 @@ fun LeetCodeProfileSection(
     val profile by viewModel.profile.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getProfile(username = "Ankush3323")
+        viewModel.getProfile(username = "code__HARD")
     }
 
     Column(

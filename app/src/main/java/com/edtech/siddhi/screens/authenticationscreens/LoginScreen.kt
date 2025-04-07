@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,16 +27,21 @@ import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
 import com.edtech.siddhi.utils.Validations
+import com.edtech.siddhi.viewmodel.AuthState
+import com.edtech.siddhi.viewmodel.AuthViewModel
 
 @SuppressLint("ShowToast")
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun LoginScreen(modifier: Modifier = Modifier, navController: NavController , authViewModel: AuthViewModel) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
+
+    var authState = authViewModel.authState.observeAsState()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -44,6 +50,22 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
 
+    LaunchedEffect(authState.value) {
+        when(val state = authState.value){
+            is AuthState.Authenticated -> {
+                Toast.makeText(context, " Login Successful", Toast.LENGTH_SHORT).show()
+                navController.navigate("home"){
+                    popUpTo("login"){
+                        inclusive = true
+                    }
+                }
+            }
+            is AuthState.Error ->{
+                Toast.makeText(context, state.msg,Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -136,10 +158,10 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             // Login Button
             Button(
                 onClick = {
-                    if (emailError || passwordError) {
+                    if (emailError || passwordError || email.isEmpty() || password.isEmpty()) {
                         Toast.makeText(context, "Please fix the errors", Toast.LENGTH_SHORT).show()
                     } else {
-                        navController.navigate("home")
+                       authViewModel.logIn(email = email, password = password)
                     }
                 },
                 shape = RoundedCornerShape(12.dp),
@@ -179,11 +201,14 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                 )
             }
         }
+        if (authState.value == AuthState.Loading){
+            LoadingDialog()
+        }
     }
 }
 
 @Preview
 @Composable
 private fun PreviewLogin() {
-    LoginScreen(navController = rememberNavController())
+    LoginScreen(navController = rememberNavController(), authViewModel = AuthViewModel())
 }

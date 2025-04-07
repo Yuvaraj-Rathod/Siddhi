@@ -1,5 +1,6 @@
 package com.edtech.siddhi.screens.homescreen
 import CodingPlatformSection
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,17 +12,20 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,6 +38,9 @@ import com.edtech.siddhi.ui.theme.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.edtech.siddhi.api.UserDetail
+import com.edtech.siddhi.screens.authenticationscreens.ConfirmationDialog
+import com.edtech.siddhi.viewmodel.AuthState
+import com.edtech.siddhi.viewmodel.AuthViewModel
 import com.edtech.siddhi.viewmodel.LeetcodeViewModel
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.swiperefresh.SwipeRefresh
@@ -41,7 +48,23 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 
 
 @Composable
-fun ProfileSection(user: UserDetail?,navController: NavController) {
+fun ProfileSection(user: UserDetail?, navController: NavController, authViewModel: AuthViewModel) {
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
+
+    LaunchedEffect(authState.value) {
+        when (authState.value) {
+            is AuthState.UnAuthenticated -> {
+                Toast.makeText(context, "Signed Out", Toast.LENGTH_SHORT).show()
+                navController.navigate("login") {
+                    popUpTo("home") { inclusive = true }
+                }
+            }
+            else -> Unit
+        }
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -83,9 +106,7 @@ fun ProfileSection(user: UserDetail?,navController: NavController) {
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = user?.name ?: "User",
                     color = Color.White,
@@ -101,19 +122,31 @@ fun ProfileSection(user: UserDetail?,navController: NavController) {
                 )
             }
 
-            IconButton(
-                onClick = { navController.navigate("home") }
-            ) {
+            IconButton(onClick = { showDialog = true }) {
                 Icon(
-                    imageVector = Icons.Filled.Refresh,
-                    contentDescription = "Menu",
+                    imageVector = Icons.Filled.Logout,
+                    contentDescription = "Logout",
                     tint = Silver,
-                    modifier = Modifier.size(32.dp)
+                    modifier = Modifier.size(29.dp)
                 )
             }
         }
     }
+
+    // Show confirmation dialog if triggered
+    if (showDialog) {
+        ConfirmationDialog(
+            onConfirm = {
+                authViewModel.signOut()
+                showDialog = false
+            },
+            onDismiss = {
+                showDialog = false
+            }
+        )
+    }
 }
+
 
 @Preview(showBackground = true)
 @Composable
@@ -128,5 +161,5 @@ fun ProfileSectionPreview() {
         twitter = "@priyanshu",
         username = "priyanshu2202k"
     )
-    ProfileSection(user = dummyUser, navController = rememberNavController())
+    ProfileSection(user = dummyUser, navController = rememberNavController(), authViewModel = AuthViewModel())
 }

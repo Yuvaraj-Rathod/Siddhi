@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,9 +31,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
 import com.edtech.siddhi.utils.Validations
+import com.edtech.siddhi.viewmodel.AuthState
+import com.edtech.siddhi.viewmodel.AuthViewModel
 
 @Composable
-fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current
 
@@ -41,9 +44,29 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
     var password by remember { mutableStateOf("") }
     var leetCodeLink by remember { mutableStateOf("") }
 
+    var authState = authViewModel.authState.observeAsState()
+
     var emailError by remember { mutableStateOf(false) }
     var passwordError by remember { mutableStateOf(false) }
     var leetCodeError by remember { mutableStateOf(false) }
+
+
+    LaunchedEffect(authState.value) {
+        when (val state = authState.value){
+            is AuthState.Authenticated -> {
+                Toast.makeText(context,"Registered Successfully", Toast.LENGTH_SHORT).show()
+                navController.navigate("home"){
+                    popUpTo("register"){
+                        inclusive = true
+                    }
+                }
+            }
+            is AuthState.Error -> {
+                Toast.makeText(context, state.msg,Toast.LENGTH_SHORT).show()
+            }
+            else -> Unit
+        }
+    }
 
     Box(
         modifier = modifier
@@ -145,7 +168,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 value = leetCodeLink,
                 onValueChange = {
                     leetCodeLink = it
-                    leetCodeError = !Validations.isValidLeetCodeProfile(leetCodeLink)
+                    leetCodeError = leetCodeLink.isEmpty()
                 },
                 label = { Text("LeetCode Profile Id", color = Silver) },
                 textStyle = TextStyle(color = Color.White),
@@ -158,16 +181,20 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 modifier = Modifier.fillMaxWidth(),
                 isError = leetCodeError
             )
-            if (leetCodeError) Text("Enter a valid LeetCode profile id", color = Color.Red, fontSize = 12.sp)
+            if (leetCodeError) Text("Enter LeetCode profile id", color = Color.Red, fontSize = 12.sp)
 
             Spacer(modifier = Modifier.height(20.dp))
 
             Button(
                 onClick = {
-                    if (emailError || passwordError || leetCodeError) {
+                    if (emailError || passwordError || leetCodeError || name.isBlank()) {
                         Toast.makeText(context, "Please fix the errors", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(context, "Registration Successful!", Toast.LENGTH_SHORT).show()
+                      authViewModel.SignUp(
+                          email = email,
+                          password = password,
+                          username = name,
+                          leetcodeId = leetCodeLink)
                     }
                 },
                 shape = RoundedCornerShape(12.dp),
@@ -201,6 +228,9 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 )
             }
         }
+        if (authState.value is AuthState.Loading) {
+            LoadingDialog()
+        }
     }
 }
 
@@ -224,5 +254,5 @@ fun textFieldColors() = TextFieldDefaults.colors(
 @Preview
 @Composable
 private fun PreviewRegistration() {
-    RegistrationScreen(navController = rememberNavController())
+    RegistrationScreen(navController = rememberNavController(), authViewModel = AuthViewModel())
 }

@@ -13,9 +13,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
 import com.edtech.siddhi.ui.theme.SoftCaramel
+import com.edtech.siddhi.viewmodel.AuthViewModel
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 
 
 val SoftCaramel = Color(0xFFF5E0C3)
@@ -24,7 +28,25 @@ val SoftCaramelGradient = Brush.verticalGradient(
 )
 
 @Composable
-fun SplashScreen(navController: NavController) {
+fun SplashScreen(navController: NavController, authViewModel : AuthViewModel) {
+
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        delay(2000)
+
+        val currentUser = authViewModel.getCurrentUser()
+        if (currentUser != null) {
+            navController.navigate("home") {
+                popUpTo("splash") { inclusive = true }
+            }
+        } else {
+            navController.navigate("welcome") {
+                popUpTo("splash") { inclusive = true }
+            }
+        }
+    }
+
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset("splash.json"))
     val progress by animateLottieCompositionAsState(
         composition,

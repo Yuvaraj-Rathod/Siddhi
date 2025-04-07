@@ -13,6 +13,7 @@ import com.edtech.siddhi.screens.authenticationscreens.RegistrationScreen
 import com.edtech.siddhi.screens.WelcomeScreen
 import com.edtech.siddhi.screens.chatbotscreen.ChatScreen
 import com.edtech.siddhi.screens.subject.CodeSnippetPage
+import com.edtech.siddhi.viewmodel.AuthViewModel
 import com.edtech.siddhi.viewmodel.ChatViewModel
 import com.example.manvantara.screens.subject.CnPage
 import com.example.manvantara.screens.subject.DbmsPage
@@ -21,18 +22,18 @@ import com.example.manvantara.screens.subject.OsPage
 
 @SuppressLint("ComposableDestinationInComposeScope")
 @Composable
-fun AppNavigation(modifier: Modifier = Modifier) {
+fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) {
     val navController = rememberNavController()
 
     NavHost(navController = navController,"splash"){
         composable("home") {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController, authViewModel = authViewModel)
         }
         composable("register") {
-            RegistrationScreen(navController = navController)
+            RegistrationScreen(navController = navController, authViewModel = authViewModel)
         }
         composable("login") {
-            LoginScreen(navController = navController)
+            LoginScreen(navController = navController, authViewModel = authViewModel)
             }
         composable("bot") {
             ChatScreen(chatViewModel = ChatViewModel())
@@ -56,7 +57,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
             WelcomeScreen(navController = navController)
         }
         composable("splash") {
-            SplashScreen(navController = navController)
+            SplashScreen(navController = navController,authViewModel = authViewModel)
         }
     }
 }
