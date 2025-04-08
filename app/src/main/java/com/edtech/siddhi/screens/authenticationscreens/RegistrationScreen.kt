@@ -52,21 +52,25 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
 
 
     LaunchedEffect(authState.value) {
-        when (val state = authState.value){
+        when (val state = authState.value) {
             is AuthState.Authenticated -> {
-                Toast.makeText(context,"Registered Successfully", Toast.LENGTH_SHORT).show()
-                navController.navigate("home"){
-                    popUpTo("register"){
-                        inclusive = true
-                    }
+                Toast.makeText(context, "Logged in successfully", Toast.LENGTH_SHORT).show()
+                navController.navigate("home") {
+                    popUpTo("login") { inclusive = true }
+                }
+            }
+            is AuthState.EmailVerificationSent -> {
+                navController.navigate("verification") {
+                    popUpTo("register") { inclusive = true }
                 }
             }
             is AuthState.Error -> {
-                Toast.makeText(context, state.msg,Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, state.msg, Toast.LENGTH_SHORT).show()
             }
             else -> Unit
         }
     }
+
 
     Box(
         modifier = modifier
@@ -228,7 +232,7 @@ fun RegistrationScreen(modifier: Modifier = Modifier, navController: NavControll
                 )
             }
         }
-        if (authState.value is AuthState.Loading) {
+        if (authState.value is AuthState.Loading || authState.value is AuthState.EmailVerificationSent) {
             LoadingDialog()
         }
     }

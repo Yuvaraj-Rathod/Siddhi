@@ -39,6 +39,7 @@ import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.edtech.siddhi.screens.authenticationscreens.ConfirmationDialog
 import com.edtech.siddhi.skeletalloading.CodingPlatformSkeleton
 import com.edtech.siddhi.skeletalloading.LeetCodeProfileSkeleton
 import com.edtech.siddhi.skeletalloading.ProfileSectionSkeleton
@@ -57,6 +58,7 @@ fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
     val viewModel: LeetcodeViewModel = hiltViewModel()
     val user by viewModel.user.collectAsState()
     val profile by viewModel.profile.collectAsState()
+    var showDialog by remember  { mutableStateOf(false)}
 
     var authState = authViewModel.authState.observeAsState()
 
@@ -70,7 +72,7 @@ fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate("bot") },
+                onClick = { showDialog = true },
                 containerColor = Color(0xFF434344),
                 shape = CircleShape,
                 modifier = Modifier.size(60.dp)
@@ -107,6 +109,18 @@ fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
             // Subjects Section
             if (isLoading) SubjectSkeleton() else SubjectSection( navController = navController, modifier = Modifier.fillMaxWidth())
 
+        }
+        // Show confirmation dialog if triggered
+        if (showDialog) {
+            ConfirmationDialog(
+                onConfirm = {
+                    authViewModel.signOut()
+                    showDialog = false
+                },
+                onDismiss = {
+                    showDialog = false
+                }
+            )
         }
     }
 }

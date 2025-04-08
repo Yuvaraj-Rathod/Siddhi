@@ -11,6 +11,7 @@ import com.edtech.siddhi.screens.homescreen.HomeScreen
 import com.edtech.siddhi.screens.authenticationscreens.LoginScreen
 import com.edtech.siddhi.screens.authenticationscreens.RegistrationScreen
 import com.edtech.siddhi.screens.WelcomeScreen
+import com.edtech.siddhi.screens.authenticationscreens.EmailVerificationScreen
 import com.edtech.siddhi.screens.chatbotscreen.ChatScreen
 import com.edtech.siddhi.screens.subject.CodeSnippetPage
 import com.edtech.siddhi.viewmodel.AuthViewModel
@@ -25,7 +26,7 @@ import com.example.manvantara.screens.subject.OsPage
 fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController,"splash"){
+    NavHost(navController = navController,"verification"){
         composable("home") {
             HomeScreen(navController = navController, authViewModel = authViewModel)
         }
@@ -58,6 +59,9 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) 
         }
         composable("splash") {
             SplashScreen(navController = navController,authViewModel = authViewModel)
+        }
+        composable("verification") {
+            EmailVerificationScreen(navController,authViewModel)
         }
     }
 }

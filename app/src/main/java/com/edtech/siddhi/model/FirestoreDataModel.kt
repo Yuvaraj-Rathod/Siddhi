@@ -1,6 +1,7 @@
 package com.edtech.siddhi.model
 
-data class User(
+data class UserDetail(
+    val uid: String = "",
     val username: String = "",
     val email: String = "",
     val leetcodeId: String = "",
