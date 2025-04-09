@@ -38,7 +38,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.edtech.siddhi.ui.theme.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import com.edtech.siddhi.api.UserDetail
 import com.edtech.siddhi.screens.authenticationscreens.ConfirmationDialog
 import com.edtech.siddhi.skeletalloading.CodingPlatformSkeleton
 import com.edtech.siddhi.skeletalloading.LeetCodeProfileSkeleton
@@ -47,32 +49,37 @@ import com.edtech.siddhi.skeletalloading.SubjectSkeleton
 import com.edtech.siddhi.viewmodel.AuthState
 import com.edtech.siddhi.viewmodel.AuthViewModel
 import com.edtech.siddhi.viewmodel.LeetcodeViewModel
+import com.edtech.siddhi.viewmodel.UserFireStoreViewModel
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.firebase.auth.oAuthProvider
 import com.google.rpc.context.AttributeContext.Auth
 import dagger.hilt.android.lifecycle.HiltViewModel
-
 @Composable
-fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
-    val viewModel: LeetcodeViewModel = hiltViewModel()
-    val user by viewModel.user.collectAsState()
-    val profile by viewModel.profile.collectAsState()
-    var showDialog by remember  { mutableStateOf(false)}
+fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
+    val leetcodeViewModel: LeetcodeViewModel = hiltViewModel()
+    val userViewModel: UserFireStoreViewModel = viewModel()
 
-    var authState = authViewModel.authState.observeAsState()
+    val user by leetcodeViewModel.user.collectAsState()
+    val profile by leetcodeViewModel.profile.collectAsState()
+    val userDetailFireStore by userViewModel.userDetails.observeAsState()
+
+    val authState = authViewModel.authState.observeAsState()
 
     val isLoading = user == null || profile == null
 
-    LaunchedEffect(Unit) {
-        viewModel.getUser("Yuvaraj_Rathod_")
-        viewModel.getProfile("code__HARD")
+    // 🔥 Launch effect only when Firestore data becomes available
+    LaunchedEffect(userDetailFireStore) {
+        userDetailFireStore?.let {
+            leetcodeViewModel.getUser(it.leetcodeId)
+            leetcodeViewModel.getProfile(it.leetcodeId)
+        }
     }
 
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showDialog = true },
+                onClick = { navController.navigate("bot") },
                 containerColor = Color(0xFF434344),
                 shape = CircleShape,
                 modifier = Modifier.size(60.dp)
@@ -80,7 +87,7 @@ fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
                 Icon(
                     imageVector = Icons.Filled.Person,
                     contentDescription = "person",
-                    tint =  Color(0xFFE3A869),
+                    tint = Color(0xFFE3A869),
                     modifier = Modifier.size(30.dp)
                 )
             }
@@ -94,33 +101,19 @@ fun HomeScreen(navController: NavController,authViewModel: AuthViewModel) {
                 .padding(horizontal = 6.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // User Profile Section
-            if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController ,authViewModel)
+            // 🔹 User Profile Section
+            if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController, authViewModel)
 
+            // 🔹 Leetcode Section
+            if (isLoading) LeetCodeProfileSkeleton()
+            else userDetailFireStore?.let { LeetCodeProfileSection(leetcodeViewModel, it) }
 
-            // Let code Profile Section
-            if (isLoading) LeetCodeProfileSkeleton() else LeetCodeProfileSection(viewModel)
-
-
-            // Coding Platforms Section
+            // 🔹 Coding Platforms
             if (isLoading) CodingPlatformSkeleton() else CodingPlatformSection(Modifier.fillMaxWidth())
 
-
-            // Subjects Section
-            if (isLoading) SubjectSkeleton() else SubjectSection( navController = navController, modifier = Modifier.fillMaxWidth())
-
-        }
-        // Show confirmation dialog if triggered
-        if (showDialog) {
-            ConfirmationDialog(
-                onConfirm = {
-                    authViewModel.signOut()
-                    showDialog = false
-                },
-                onDismiss = {
-                    showDialog = false
-                }
-            )
+            // 🔹 Subjects
+            if (isLoading) SubjectSkeleton()
+            else SubjectSection(navController = navController, modifier = Modifier.fillMaxWidth())
         }
     }
 }

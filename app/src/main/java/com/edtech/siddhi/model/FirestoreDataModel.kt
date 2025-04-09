@@ -1,6 +1,6 @@
 package com.edtech.siddhi.model
 
-data class UserDetail(
+data class UserFireStore(
     val uid: String = "",
     val username: String = "",
     val email: String = "",

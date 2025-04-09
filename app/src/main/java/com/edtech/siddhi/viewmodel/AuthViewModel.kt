@@ -3,7 +3,6 @@ package com.edtech.siddhi.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.edtech.siddhi.model.UserDetail
 import com.edtech.siddhi.utils.Validations
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -106,6 +105,7 @@ class AuthViewModel : ViewModel() {
             if (user.isEmailVerified) {
                 // ✅ Now write to Firestore using stored values
                 val userMap = mapOf(
+                    "uid" to user.uid,
                     "username" to pendingUsername,
                     "email" to pendingEmail,
                     "leetcodeId" to pendingLeetcodeId,

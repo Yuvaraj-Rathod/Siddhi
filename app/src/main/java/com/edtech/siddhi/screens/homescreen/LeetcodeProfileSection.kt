@@ -36,17 +36,18 @@ import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.edtech.siddhi.api.LeetcodeProfile
+import com.edtech.siddhi.model.UserFireStore
 import com.edtech.siddhi.viewmodel.LeetcodeViewModel
 
 @Composable
 fun LeetCodeProfileSection(
     viewModel: LeetcodeViewModel = hiltViewModel(),
-    modifier: Modifier = Modifier
+    userDetailFireStore : UserFireStore
 ) {
     val profile by viewModel.profile.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.getProfile(username = "code__HARD")
+        viewModel.getProfile(userDetailFireStore.leetcodeId)
     }
 
     Column(

@@ -26,7 +26,7 @@ import com.example.manvantara.screens.subject.OsPage
 fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController,"verification"){
+    NavHost(navController = navController,"home"){
         composable("home") {
             HomeScreen(navController = navController, authViewModel = authViewModel)
         }
