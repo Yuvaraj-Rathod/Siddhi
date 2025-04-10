@@ -34,3 +34,10 @@ data class YoutubeVideo(
 enum class DifficultyTag {
     EASY, MEDIUM, HARD
 }
+
+data class UserRank(
+    val name: String,
+    val leetcodeId: String,
+    val rank: Int,
+    val score: Int // optional, in case you want to show XP/points
+)

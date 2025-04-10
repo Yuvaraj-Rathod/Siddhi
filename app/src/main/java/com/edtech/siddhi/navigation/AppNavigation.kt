@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.edtech.siddhi.screens.LeaderBoardPage.LeaderboardScreen
 import com.edtech.siddhi.screens.SplashScreen
 import com.edtech.siddhi.screens.homescreen.HomeScreen
 import com.edtech.siddhi.screens.authenticationscreens.LoginScreen
@@ -62,6 +63,9 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) 
         }
         composable("verification") {
             EmailVerificationScreen(navController,authViewModel)
+        }
+        composable ("leaderboard"){
+            LeaderboardScreen(navController =navController)
         }
     }
 }

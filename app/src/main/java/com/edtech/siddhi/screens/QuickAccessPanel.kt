@@ -18,6 +18,8 @@ import androidx.navigation.NavController
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
@@ -116,6 +118,18 @@ fun QuickEdgePanel(
                     expanded = false
                 }) {
                     Icon(Icons.Default.Refresh, contentDescription = "refresh", tint = Color.White)
+                }
+                IconButton(onClick = {
+//                    navController.navigate("about")
+                    expanded = false
+                }) {
+                    Icon(Icons.Default.Info, contentDescription = "about", tint = Color.White)
+                }
+                IconButton(onClick = {
+                    navController.navigate("leaderboard")
+                    expanded = false
+                }) {
+                    Icon(Icons.Default.Leaderboard, contentDescription = "rank", tint = Color.White)
                 }
             }
         }

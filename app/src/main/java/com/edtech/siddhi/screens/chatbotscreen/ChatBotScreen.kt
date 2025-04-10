@@ -75,10 +75,6 @@ fun ChatScreen(
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(12.dp)
-                    .background(
-                        color = Color.Black.copy(alpha = 0.6f),
-                        shape = RoundedCornerShape(12.dp)
-                    )
                     .size(50.dp)
             ) {
                 Icon(
