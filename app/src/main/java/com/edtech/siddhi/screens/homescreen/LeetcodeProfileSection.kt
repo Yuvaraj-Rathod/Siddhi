@@ -53,6 +53,7 @@ fun LeetCodeProfileSection(
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .height(249.dp)
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -78,11 +79,11 @@ fun LeetCodeProfileSection(
 
             Card(
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF303030)),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
                 elevation = CardDefaults.cardElevation(8.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(215.dp) // ⬆ Increased height
+                    .height(249.dp) // ⬆ Increased height
                     .padding(vertical = 4.dp) // ⬆ Added vertical padding for better spacing
             ) {
                 Row(
@@ -136,7 +137,7 @@ fun LeetCodeProfileSection(
                             )
 
                             drawArc(
-                                color = Color.Red,
+                                color = Color.Green,
                                 startAngle = 270f,
                                 sweepAngle = 360 * progress,
                                 useCenter = false,
@@ -169,7 +170,7 @@ fun LeetCodeProfileSection(
 fun ProblemSolvedBox(level: String, solved: Int, total: Int, color: Color, size: Dp) {
     Card(
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = DarkOnyx),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF2C2C2C)),
         elevation = CardDefaults.cardElevation(6.dp),
         modifier = Modifier
             .padding(4.dp)

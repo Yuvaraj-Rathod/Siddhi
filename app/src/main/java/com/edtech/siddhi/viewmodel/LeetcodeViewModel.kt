@@ -30,7 +30,7 @@ class LeetcodeViewModel @Inject constructor(
             if (data != null) {
                 _profile.value = data // ✅ Ensure state is updated
             } else {
-                println("LeetcodeViewModel: No Data Found") // ❌ Debugging
+                println("LeetcodeViewModel: No Data Found") 
             }
         }
     }

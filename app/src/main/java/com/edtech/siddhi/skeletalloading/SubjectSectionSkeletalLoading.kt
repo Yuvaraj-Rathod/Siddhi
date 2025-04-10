@@ -13,13 +13,13 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SubjectSkeleton() {
     LazyRow(
-        modifier = Modifier.padding(top = 25.dp).height(80.dp),
+        modifier = Modifier.padding(top = 10.dp).height(80.dp),
         contentPadding = PaddingValues(horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp)
 
     ) {
         items(3) {
-            ShimmerBox(height = 120.dp, width = 250.dp, shape = RoundedCornerShape(14.dp))
+            ShimmerBox(height = 150.dp, width = 250.dp, shape = RoundedCornerShape(14.dp))
         }
     }
 }

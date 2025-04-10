@@ -55,7 +55,7 @@ import androidx.core.net.toUri
                     elevation = CardDefaults.cardElevation(6.dp), // Elevation for shadow
                     modifier = Modifier
                         .fillMaxWidth()
-                        .aspectRatio(1.1f) // Slightly adjusted for better alignment
+                        .aspectRatio(1.04f) // Slightly adjusted for better alignment
                         .clickable {
                             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(platform.url)))
                         }

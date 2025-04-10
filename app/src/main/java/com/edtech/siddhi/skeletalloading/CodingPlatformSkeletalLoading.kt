@@ -20,7 +20,7 @@ fun CodingPlatformSkeleton() {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(4) { // Show 4 skeleton cards while loading
-            ShimmerBox(height = 155.dp, width = 140.dp, shape = RoundedCornerShape(16.dp))
+            ShimmerBox(height = 180.dp, width = 140.dp, shape = RoundedCornerShape(16.dp))
         }
     }
 }

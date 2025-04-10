@@ -67,10 +67,10 @@ fun SubjectCard(cardData: CardData) {
     Card(
         shape = RoundedCornerShape(14.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF303030)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
         modifier = Modifier
             .width(250.dp)
-            .height(100.dp)
+            .height(90.dp)
             .clickable { cardData.onClick() }
     ) {
         // 🌌 Deep Midnight Blue to Cool Cyan Gradient

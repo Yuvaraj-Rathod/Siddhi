@@ -27,7 +27,7 @@ fun ConfirmationDialog(
         text = {
             Text("Are you sure you want to sign out?", color = Color.LightGray)
         },
-        containerColor = Color(0xFF303030),
+        containerColor = Color(0xFF1E1E1E),
         confirmButton = {
             TextButton(
                 onClick = onConfirm
@@ -36,7 +36,7 @@ fun ConfirmationDialog(
                     "Sign Out",
                     color = RaisinBlack,
                     modifier = Modifier
-                        .background(SoftCaramel, RoundedCornerShape(8.dp))
+                        .background(SoftCaramel, RoundedCornerShape(10.dp))
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                 )
             }

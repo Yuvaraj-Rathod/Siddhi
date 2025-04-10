@@ -70,7 +70,7 @@ fun ProfileSection(user: UserDetail?, navController: NavController, authViewMode
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 2.dp),
         shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF303030)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF1E1E1E)),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Row(

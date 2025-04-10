@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -18,26 +20,38 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.airbnb.lottie.compose.*
 import com.edtech.siddhi.model.MessageModel
+import com.edtech.siddhi.screens.QuickEdgePanel
 import com.edtech.siddhi.viewmodel.ChatViewModel
 import com.edtech.siddhi.ui.theme.DarkOnyx
 import com.edtech.siddhi.ui.theme.Silver
 import com.edtech.siddhi.ui.theme.CadetGray
+import com.edtech.siddhi.ui.theme.RaisinBlack
+import com.edtech.siddhi.ui.theme.SoftCaramel
 
 @Composable
-fun ChatScreen(modifier: Modifier = Modifier, chatViewModel: ChatViewModel) {
+fun ChatScreen(
+    chatViewModel: ChatViewModel,
+    navController: NavController
+) {
     Scaffold(
         bottomBar = { MessageInput { chatViewModel.sendMessage(it) } },
-        containerColor = Color(0xFF1E1E2E) // Dark modern background
+        containerColor = Color(0xFF161616)
     ) { innerPadding ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
+                .padding(innerPadding)
         ) {
-            Column(modifier = Modifier.fillMaxSize()) {
+            // Chat content column
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 48.dp)
+            ) {
                 MessageList(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -50,17 +64,47 @@ fun ChatScreen(modifier: Modifier = Modifier, chatViewModel: ChatViewModel) {
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center
                     ) {
-                        LottieAnimationPlaceholder()
+                        Text(text = "Ask something...!!", color = Color.Gray, fontSize = 20.sp)
                     }
                 }
             }
+
+            // Floating Back Button
+            IconButton(
+                onClick = { navController.navigate("home") },
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(12.dp)
+                    .background(
+                        color = Color.Black.copy(alpha = 0.6f),
+                        shape = RoundedCornerShape(12.dp)
+                    )
+                    .size(50.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack,
+                    contentDescription = "Back",
+                    tint = Color.White
+                )
+            }
+
+            // ✅ Floating Edge Panel — placed correctly
+            QuickEdgePanel(
+                navController = navController,
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .offset(y = (-10).dp)
+            )
         }
     }
 }
 
+
+
+
 @Composable
 fun LottieAnimationPlaceholder() {
-    val composition by rememberLottieComposition(LottieCompositionSpec.Asset("chatloading.json"))
+    val composition by rememberLottieComposition(LottieCompositionSpec.Asset("loading.json"))
     LottieAnimation(
         composition = composition,
         iterations = LottieConstants.IterateForever,
@@ -74,7 +118,7 @@ fun MessageInput(onMessageSend: (String) -> Unit) {
     var message by remember { mutableStateOf("") }
 
     Surface(
-        color = Color(0xFF2B2D42),
+        color = Color(0xFF222222),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp)
@@ -89,10 +133,11 @@ fun MessageInput(onMessageSend: (String) -> Unit) {
                 onValueChange = { message = it },
                 placeholder = { Text("Ask me anything...", color = CadetGray) },
                 colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color(0xFF232539),
-                    unfocusedContainerColor = Color(0xFF232539),
+                    focusedContainerColor = Color(0xFF222222),
+                    unfocusedContainerColor = Color(0xFF222222),
                     focusedTextColor = Silver,
-                    unfocusedTextColor = CadetGray
+                    unfocusedTextColor = CadetGray,
+                    cursorColor = SoftCaramel
                 ),
                 modifier = Modifier.weight(1f),
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
@@ -110,14 +155,14 @@ fun MessageInput(onMessageSend: (String) -> Unit) {
                 },
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Color(0xFF0077B6))
+                    .background(SoftCaramel)
                     .padding(12.dp)
                     .size(22.dp)
             ) {
                 Icon(
                     imageVector = Icons.Default.Send,
                     contentDescription = "Send",
-                    tint = Color.White,
+                    tint = Color.Black,
                     modifier = Modifier.size(17.dp)
                 )
             }
@@ -133,11 +178,10 @@ fun MessageList(modifier: Modifier = Modifier, messageList: List<MessageModel>) 
         }
     }
 }
-
 @Composable
 fun MessageRow(messagemodel: MessageModel) {
     val isModel = messagemodel.role == "model"
-    val messageBackground = if (isModel) Color(0xFF3A3F58) else Color(0xFF0077B6)
+    val messageBackground = if (isModel) SoftCaramel else Color(0xFF0077B6)
 
     Row(
         modifier = Modifier

@@ -20,7 +20,7 @@ fun LeetCodeProfileSkeleton() {
         elevation = CardDefaults.cardElevation(8.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(220.dp)
+            .height(240.dp)
             .padding(vertical = 8.dp)
     ) {
         Row(

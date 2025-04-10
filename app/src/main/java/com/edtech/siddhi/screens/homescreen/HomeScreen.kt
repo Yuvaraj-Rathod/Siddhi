@@ -9,15 +9,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.AddAPhoto
-import androidx.compose.material.icons.filled.Android
-import androidx.compose.material.icons.filled.AssistWalker
-import androidx.compose.material.icons.filled.Assistant
-import androidx.compose.material.icons.filled.CatchingPokemon
-import androidx.compose.material.icons.filled.Help
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Settings
@@ -41,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.edtech.siddhi.api.UserDetail
+import com.edtech.siddhi.screens.QuickEdgePanel
 import com.edtech.siddhi.screens.authenticationscreens.ConfirmationDialog
 import com.edtech.siddhi.skeletalloading.CodingPlatformSkeleton
 import com.edtech.siddhi.skeletalloading.LeetCodeProfileSkeleton
@@ -55,6 +47,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.firebase.auth.oAuthProvider
 import com.google.rpc.context.AttributeContext.Auth
 import dagger.hilt.android.lifecycle.HiltViewModel
+
 @Composable
 fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
     val leetcodeViewModel: LeetcodeViewModel = hiltViewModel()
@@ -64,11 +57,8 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
     val profile by leetcodeViewModel.profile.collectAsState()
     val userDetailFireStore by userViewModel.userDetails.observeAsState()
 
-    val authState = authViewModel.authState.observeAsState()
-
     val isLoading = user == null || profile == null
 
-    // 🔥 Launch effect only when Firestore data becomes available
     LaunchedEffect(userDetailFireStore) {
         userDetailFireStore?.let {
             leetcodeViewModel.getUser(it.leetcodeId)
@@ -91,32 +81,32 @@ fun HomeScreen(navController: NavController, authViewModel: AuthViewModel) {
                     modifier = Modifier.size(30.dp)
                 )
             }
-        },
-        bottomBar = { BottomNavBar(navController) }
+        }
+//        bottomBar = { BottomNavBar(navController) }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 6.dp, vertical = 6.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            // 🔹 User Profile Section
-            if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController, authViewModel)
+        Box(modifier = Modifier.fillMaxSize().background(Color(0xFF121212))) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = 6.dp, vertical = 6.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                if (isLoading) ProfileSectionSkeleton() else ProfileSection(user, navController, authViewModel)
+                if (isLoading) LeetCodeProfileSkeleton() else userDetailFireStore?.let { LeetCodeProfileSection(leetcodeViewModel, it) }
+                if (isLoading) CodingPlatformSkeleton() else CodingPlatformSection(Modifier.fillMaxWidth())
+                if (isLoading) SubjectSkeleton() else SubjectSection(navController = navController, modifier = Modifier.fillMaxWidth())
+            }
 
-            // 🔹 Leetcode Section
-            if (isLoading) LeetCodeProfileSkeleton()
-            else userDetailFireStore?.let { LeetCodeProfileSection(leetcodeViewModel, it) }
+            QuickEdgePanel(
+                navController = navController,
+                modifier = Modifier.align(Alignment.CenterEnd) .offset(y = (-10).dp)
+            )
 
-            // 🔹 Coding Platforms
-            if (isLoading) CodingPlatformSkeleton() else CodingPlatformSection(Modifier.fillMaxWidth())
-
-            // 🔹 Subjects
-            if (isLoading) SubjectSkeleton()
-            else SubjectSection(navController = navController, modifier = Modifier.fillMaxWidth())
         }
     }
 }
+
 
 
 @Preview

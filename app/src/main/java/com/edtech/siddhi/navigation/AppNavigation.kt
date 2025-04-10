@@ -26,7 +26,7 @@ import com.example.manvantara.screens.subject.OsPage
 fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController,"home"){
+    NavHost(navController = navController,"splash"){
         composable("home") {
             HomeScreen(navController = navController, authViewModel = authViewModel)
         }
@@ -37,7 +37,7 @@ fun AppNavigation(modifier: Modifier = Modifier, authViewModel : AuthViewModel) 
             LoginScreen(navController = navController, authViewModel = authViewModel)
             }
         composable("bot") {
-            ChatScreen(chatViewModel = ChatViewModel())
+            ChatScreen(chatViewModel = ChatViewModel(), navController = navController)
         }
         composable("dbms") {
             DbmsPage(navController = navController)
